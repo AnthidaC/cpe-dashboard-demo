@@ -1,0 +1,182 @@
+/* components/DbStatusBadge.module.css */
+
+.wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'Sarabun', system-ui, sans-serif;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  background: none;
+}
+
+.badge[data-state="live"] {
+  background: rgba(5, 150, 105, 0.12);
+  border-color: rgba(5, 150, 105, 0.4);
+  color: #059669;
+}
+
+.badge[data-state="empty"] {
+  background: rgba(217, 119, 6, 0.12);
+  border-color: rgba(217, 119, 6, 0.4);
+  color: #d97706;
+}
+
+.badge[data-state="error"] {
+  background: rgba(220, 38, 38, 0.12);
+  border-color: rgba(220, 38, 38, 0.4);
+  color: #dc2626;
+}
+
+.badge[data-state="loading"] {
+  background: rgba(100, 116, 139, 0.1);
+  border-color: rgba(100, 116, 139, 0.3);
+  color: #64748b;
+  cursor: default;
+}
+
+.badge:hover:not([data-state="loading"]) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  background-color: currentColor;
+}
+
+/* ─── Dropdown ───────────────────────────────────────────────────── */
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 300px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.14);
+  padding: 14px;
+  z-index: 1000;
+  animation: fadeIn 0.15s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.dropdownTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.tableList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.tableRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 6px;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.tableRow:hover {
+  background: #f8fafc;
+}
+
+.tableName {
+  font-size: 11.5px;
+  color: #475569;
+  font-family: 'Courier New', monospace;
+}
+
+.tableCount {
+  font-size: 11.5px;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 1px 8px;
+}
+
+.hasData {
+  background: rgba(5, 150, 105, 0.1);
+  color: #059669;
+}
+
+.noData {
+  background: rgba(100, 116, 139, 0.1);
+  color: #94a3b8;
+}
+
+.dropdownActions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 10px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.seedBtn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1.5px solid #059669;
+  background: rgba(5, 150, 105, 0.08);
+  color: #059669;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Sarabun', system-ui, sans-serif;
+}
+
+.seedBtn:hover:not(:disabled) {
+  background: #059669;
+  color: white;
+}
+
+.seedBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.refreshBtn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Sarabun', system-ui, sans-serif;
+}
+
+.refreshBtn:hover {
+  background: #f1f5f9;
+  color: #334155;
+}

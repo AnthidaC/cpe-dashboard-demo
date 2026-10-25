@@ -1,0 +1,413 @@
+/* components/Topbar.module.css — Amplitude Near-Monochrome Topbar Theme with Ultra-Responsive Layout */
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 24px;
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03);
+}
+
+.left {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0; /* CRITICAL: Allows title & subtitle to shrink without breaking layout */
+  flex: 1 1 auto;
+}
+
+.accentBar {
+  width: 3px;
+  height: 34px;
+  background: var(--color-primary, #1E61F0); /* Amplitude Cobalt Voltage */
+  border-radius: 4px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.titleWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0; /* CRITICAL */
+  overflow: hidden;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.left h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0F172A;
+  font-family: 'Sarabun', sans-serif;
+  letter-spacing: 0;
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: var(--radius-pill, 9999px);
+  background: #EFF6FF;
+  color: var(--color-primary, #1E61F0);
+  border: 1px solid #DBEAFE;
+  font-family: 'Sarabun', sans-serif;
+  letter-spacing: 0;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.subtitle {
+  font-size: 13px;
+  color: #334155;
+  font-weight: 400;
+  font-family: 'Sarabun', sans-serif;
+  line-height: 1.4;
+  letter-spacing: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0; /* CRITICAL: Controls must never be crushed */
+}
+
+.filterGroup {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #FFFFFF;
+  padding: 3px;
+  border-radius: var(--radius-sm, 6px);
+  border: 1px solid transparent;
+  flex-shrink: 0; /* CRITICAL */
+}
+
+.selectWrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.pillSelect {
+  appearance: none;
+  -webkit-appearance: none;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: var(--radius-sm, 6px);
+  padding: 6px 28px 6px 11px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #0F172A;
+  cursor: pointer;
+  outline: none;
+  font-family: 'Sarabun', sans-serif;
+  letter-spacing: 0;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+}
+
+.pillSelect:hover {
+  border-color: var(--color-primary, #1E61F0);
+  color: #0F172A;
+  background-color: #FFFFFF;
+}
+
+.pillSelect:focus {
+  border-color: var(--color-primary, #1E61F0);
+  box-shadow: 0 0 0 2.5px rgba(30, 97, 240, 0.15);
+}
+
+/* Executive Export Excel Component */
+.exportWrapper {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0; /* CRITICAL: Never shrink or deform */
+}
+
+.exportButtonGroup {
+  display: inline-flex;
+  align-items: stretch;
+  background: #1A1F23;
+  border-radius: var(--radius-pill, 9999px);
+  border: 1px solid #1A1F23;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.12);
+  white-space: nowrap; /* CRITICAL */
+  flex-shrink: 0;      /* CRITICAL */
+  transition: all 0.15s ease;
+}
+
+.exportButtonGroup:hover {
+  background: #000000;
+  border-color: #000000;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.2);
+}
+
+.exportMainBtn {
+  background: transparent;
+  border: none;
+  border-radius: 9999px 0 0 9999px;
+  padding: 7px 12px 7px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'Sarabun', sans-serif;
+  letter-spacing: 0;
+  white-space: nowrap; /* CRITICAL: Never wrap text */
+  flex-shrink: 0;      /* CRITICAL */
+  transition: background 0.15s ease;
+}
+
+.exportMainBtn:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+}
+
+.exportToggleBtn {
+  background: transparent;
+  border: none;
+  border-left: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 0 9999px 9999px 0;
+  padding: 7px 10px;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s ease;
+}
+
+.exportToggleBtn:hover,
+.toggleActive {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.formatBadge {
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 1.5px 5px;
+  border-radius: 4px;
+  background: rgba(16, 185, 129, 0.22);
+  color: #34D399;
+  letter-spacing: 0.5px;
+  border: 1px solid rgba(52, 211, 153, 0.3);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid #34D399;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Dropdown Menu */
+.dropdownMenu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 320px;
+  max-width: min(340px, 92vw);
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.14), 0 8px 10px -6px rgba(15, 23, 42, 0.08);
+  padding: 6px;
+  z-index: 100;
+  animation: slideDown 0.15s ease-out;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdownHeader {
+  padding: 7px 10px 5px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid #F1F5F9;
+  font-family: 'Sarabun', sans-serif;
+  margin-bottom: 2px;
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.12s ease;
+  font-family: 'Sarabun', sans-serif;
+  position: relative;
+  width: 100%;
+}
+
+.dropdownItem:hover {
+  background: #F8FAFC;
+}
+
+.dropdownItem:active {
+  background: #F1F5F9;
+}
+
+.itemIcon {
+  font-size: 17px;
+  line-height: 1.2;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.itemContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.itemTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0F172A;
+  line-height: 1.3;
+}
+
+.itemDesc {
+  font-size: 11.5px;
+  color: #64748B;
+  line-height: 1.35;
+}
+
+.recommendTag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 9999px;
+  background: #EFF6FF;
+  color: #1E61F0;
+  border: 1px solid #DBEAFE;
+  align-self: flex-start;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ─── Responsive Breakpoints ─────────────────────────────────────────────────── */
+
+@media (max-width: 1140px) {
+  .topbar {
+    padding: 10px 16px;
+    gap: 12px;
+  }
+  .formatBadge {
+    display: none; /* Hide .XLSX badge to save valuable horizontal space */
+  }
+  .left h2 {
+    font-size: 17px;
+  }
+  .pillSelect {
+    padding: 5px 24px 5px 8px;
+    font-size: 12px;
+  }
+  .exportMainBtn {
+    padding: 6px 10px 6px 12px;
+    font-size: 12.5px;
+  }
+}
+
+@media (max-width: 920px) {
+  .topbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 10px 16px;
+    min-height: auto;
+  }
+  .left {
+    width: 100%;
+  }
+  .right {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .dropdownMenu {
+    right: 0;
+    width: 300px;
+  }
+}
+
+@media (max-width: 600px) {
+  .right {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .filterGroup {
+    flex: 1;
+    justify-content: space-between;
+  }
+  .selectWrapper {
+    flex: 1;
+  }
+  .pillSelect {
+    width: 100%;
+  }
+}

@@ -1,0 +1,268 @@
+/* app/globals.css — Amplitude Near-Monochrome Theme with Sarabun Thai Typography */
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  /* ── Amplitude Design System: Voltage & Canvas Tokens ── */
+  --color-primary:        #1E61F0;  /* Amplitude Cobalt Blue Voltage */
+  --color-primary-dark:   #0052F2;
+  --color-primary-navy:   #001A4F;
+
+  /* ── Executive Clean Semantic Palette (Balanced Tones for Charts/Badges) ── */
+  --ku-green:             #059669;  /* Modern Emerald Green — Target Met / Success */
+  --ku-green-hover:       #047857;
+  --ku-green-light:       #F0FDF4;  /* Soft Emerald Tint */
+  --ku-green-border:      #DCFCE7;
+  --ku-green-accent:      #10B981;
+
+  --ku-blue:              #1E61F0;  /* Cobalt Voltage — Primary / Department */
+  --ku-blue-light:        #EFF6FF;
+  --ku-gold:              #D97706;  /* Refined Amber — Warning / In Progress */
+  --ku-gold-light:        #FFFBEB;
+
+  /* ── Near-Monochrome Canvas & High-Readability Surfaces ── */
+  --bg-primary:           #F8FAFC;  /* Slate 50 — Pristine White-gray canvas */
+  --bg-secondary:         #FFFFFF;
+  --bg-card:              #FFFFFF;
+  --bg-card-hover:        #F8FAFC;
+
+  /* ── Semantic Palette for Data Visualizations ── */
+  --accent-primary:       #1E61F0;  /* Cobalt Voltage */
+  --accent-navy:          #1E3A8A;  /* Deep Navy */
+  --accent-teal:          #0D9488;  /* Refined Slate Teal */
+  --accent-emerald:       #059669;  /* Emerald */
+  --accent-amber:         #D97706;  /* Clean Amber */
+  --accent-crimson:       #E11D48;  /* Rose / Alert */
+  --accent-slate:         #64748B;  /* Slate Neutral */
+  --accent-purple:        #7C3AED;  /* Modern Violet / Strategic */
+
+  /* Aliases */
+  --accent-blue:          var(--accent-primary);
+  --accent-cyan:          var(--accent-teal);
+  --accent-rose:          var(--accent-crimson);
+  --accent-indigo:        #4F46E5;
+
+  /* ── High Contrast Typography ── */
+  --text-primary:         #0F172A;  /* Deep Slate 900 — Display & Headings */
+  --text-secondary:       #1E293B;  /* Crisp Slate 800 — Clear body text (No squinting) */
+  --text-muted:           #334155;  /* Dark Slate 700 — High-contrast subtitles & labels */
+
+  /* ── Crisp Hairline Borders & Restrained Elevation ── */
+  --border:               #E2E8F0;  /* Slate 200 Hairline */
+  --border-strong:        #CBD5E1;
+  --border-active:        #1E61F0;  /* Cobalt Focus / Active */
+  --shadow-sm:            0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md:            0 4px 12px -2px rgba(15, 23, 42, 0.05), 0 2px 4px -1px rgba(15, 23, 42, 0.03);
+  --shadow-lg:            0 12px 24px -4px rgba(15, 23, 42, 0.07);
+
+  /* ── Layout Dimensions & Radii (6px floor) ── */
+  --sidebar-w:            240px;
+  --topbar-h:             60px;
+  --radius:               8px;
+  --radius-sm:            6px;
+  --radius-lg:            12px;
+  --radius-xl:            16px;
+  --radius-pill:          9999px;
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Sarabun', 'Inter', system-ui, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-size: 15px;
+  line-height: 1.65;          /* Optimized line-height for Thai diacritics */
+  font-weight: 400;
+}
+
+/* Header line bar: Restrained Voltage accent */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #1E61F0 0%, #10B981 50%, #1E61F0 100%);
+  z-index: 999;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 7px; height: 7px; }
+::-webkit-scrollbar-track { background: #F1F5F9; }
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+a { color: inherit; text-decoration: none; }
+
+/* Thai Typography: Zero negative tracking to prevent tone mark collisions */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Sarabun', sans-serif;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0;
+  line-height: 1.35;
+}
+
+/* Word break rules for Thai content */
+p, span, div, li, a {
+  word-break: break-word;
+  line-break: strict;
+}
+
+/* Tabular numbers alignment for data tables and charts */
+.tabular-nums, table td, .kpi-value {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── High-Fidelity PDF & Print Optimization ─── */
+@media print {
+  /* Prevent background colors from disappearing */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 11pt !important;
+  }
+
+  /* Reset shell display */
+  div[class*="layout_shell"] {
+    display: block !important;
+  }
+
+  /* Hide the sidebar */
+  aside, 
+  aside[class*="Sidebar_sidebar"] {
+    display: none !important;
+  }
+
+  /* Remove sidebar margin from main content area */
+  div[class*="layout_main"] {
+    margin-left: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+
+  div[class*="layout_content"] {
+    padding: 10px 0 !important;
+  }
+
+  /* Topbar modifications for print */
+  header[class*="Topbar_topbar"] {
+    position: relative !important;
+    background: transparent !important;
+    border-bottom: 2px solid var(--ku-green) !important;
+    box-shadow: none !important;
+    padding: 10px 0 !important;
+    margin-bottom: 20px !important;
+  }
+
+  /* Hide interactive selectors & buttons in topbar */
+  div[class*="Topbar_filterGroup"],
+  button[class*="Topbar_exportBtn"] {
+    display: none !important;
+  }
+
+  /* KPI cards rows */
+  div[class*="layout_kpiRow"] {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
+    margin-bottom: 20px !important;
+  }
+
+  /* Ensure card details look sharp without unnecessary hover shadows */
+  div[class*="KpiCard_card"] {
+    box-shadow: none !important;
+    border: 1px solid #cbd5e1 !important;
+    background: #ffffff !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Chart grids */
+  div[class*="layout_grid2"] {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 16px !important;
+    margin-bottom: 20px !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  div[class*="layout_grid3"] {
+    grid-template-columns: 1fr 1fr 1fr !important;
+    gap: 16px !important;
+    margin-bottom: 20px !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  div[class*="layout_grid12"] {
+    grid-template-columns: 1fr 2fr !important;
+    gap: 16px !important;
+    margin-bottom: 20px !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Chart cards */
+  div[class*="ChartCard_card"] {
+    box-shadow: none !important;
+    border: 1px solid #cbd5e1 !important;
+    background: #ffffff !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Hide inner card control tabs/buttons in print */
+  div[class*="ChartCard_controls"],
+  div[class*="ChartControlGroup_container"] {
+    display: none !important;
+  }
+
+  /* Data Table styling in print */
+  table {
+    page-break-inside: auto !important;
+  }
+  tr {
+    page-break-inside: avoid !important;
+    page-break-after: auto !important;
+  }
+  thead {
+    display: table-header-group !important;
+  }
+
+  /* Hide other page controls/buttons when exporting PDF */
+  div[class*="controlsCard"],
+  div[class*="page_controlsCard"],
+  button[class*="clearSearch"],
+  div[class*="ChartFilterBar_filterBar"] {
+    display: none !important;
+  }
+
+  /* Hide any general helper elements */
+  .no-print {
+    display: none !important;
+  }
+}
+

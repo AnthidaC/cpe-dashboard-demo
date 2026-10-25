@@ -1,0 +1,117 @@
+/* app/layout.module.css — Official Soft Emerald Layout Theme */
+
+.shell {
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+.main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.content {
+  flex: 1;
+  padding: 18px 24px;
+}
+
+/* KPI grid */
+.kpiRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+/* Chart grids */
+.grid2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+  align-items: stretch;
+}
+
+.grid3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+  align-items: stretch;
+}
+
+.grid1 {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.grid12 {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: 16px;
+  margin-bottom: 16px;
+  align-items: stretch;
+}
+
+/* Section heading */
+.sectionHeading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.shText h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0F172A;
+  font-family: 'Sarabun', sans-serif;
+  letter-spacing: 0;
+  line-height: 1.35;
+}
+
+.shText p {
+  font-size: 13px;
+  color: var(--text-muted, #64748B);
+  margin-top: 2px;
+  font-weight: 500;
+  font-family: 'Sarabun', sans-serif;
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+
+.shBadge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill, 9999px);
+  background: #EFF6FF;
+  color: var(--color-primary, #1E61F0);
+  border: 1px solid #DBEAFE;
+  font-family: 'Sarabun', sans-serif;
+  letter-spacing: 0;
+}
+
+@media (max-width: 1100px) {
+  .grid2,
+  .grid3,
+  .grid12 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .shell { flex-direction: column; }
+  .main { margin-left: 0; }
+  .content { padding: 20px; }
+}

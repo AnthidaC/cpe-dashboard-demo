@@ -1,0 +1,15 @@
+.scroll { width: 100%; overflow-x: auto; }
+.grid { display: grid; min-width: 540px; column-gap: 8px; row-gap: 2px; }
+.paired { grid-template-columns: minmax(0, 1fr) clamp(140px, 28%, 270px) minmax(0, 1fr); }
+.single { grid-template-columns: minmax(160px, 34%) minmax(0, 1fr); }
+.metricTitle, .categoryTitle { font-size: 12px; font-weight: 600; line-height: 1.65; padding: 4px 6px; text-align: center; color: #000000; }
+.metricTitle i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; }
+.categoryTitle { text-align: left; }
+.plot { position: relative; min-width: 0; width: 100%; }
+.names { display: flex; flex-direction: column; min-width: 0; box-sizing: border-box; }
+.nameRow { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: flex-start; padding: 0 6px; text-align: left; font-size: 12px; font-weight: 500; line-height: 1.65; color: #000000; }
+.nameRow span, .nameRow button { display: -webkit-box; width: 100%; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
+.nameRow button { padding: 0; border: 0; background: none; color: inherit; font: inherit; line-height: inherit; text-align: inherit; cursor: pointer; }
+.nameRow button:hover { text-decoration: underline; }
+.nameRow button:focus-visible { outline: 2px solid #1E61F0; outline-offset: 3px; }
+.note { font-size: 12px; color: #697077; line-height: 1.65; margin: 8px 0 0; }

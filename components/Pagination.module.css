@@ -1,0 +1,7 @@
+.pagination { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 12px 0 0; color: #475569; font-size: 13px; line-height: 1.65; }
+.actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.actions label { display: inline-flex; align-items: center; gap: 6px; }
+.actions button, .actions select { min-height: 36px; padding: 5px 10px; border: 1px solid #CBD5E1; border-radius: 6px; font: inherit; color: #0F172A; background: white; cursor: pointer; }
+.actions button:disabled { opacity: .45; cursor: default; }
+.actions button:focus-visible, .actions select:focus-visible { outline: 2px solid #1E61F0; outline-offset: 2px; }
+@media (max-width: 768px) { .actions button, .actions select { min-height: 44px; } }

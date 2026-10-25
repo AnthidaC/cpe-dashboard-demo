@@ -1,0 +1,163 @@
+/* components/ChartControlGroup.module.css — Amplitude Near-Monochrome Chart Control System */
+
+.controlWrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+  font-family: 'Sarabun', sans-serif;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #0F172A;
+  white-space: nowrap;
+  letter-spacing: 0;
+}
+
+.track {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  flex-wrap: wrap;
+  max-width: 100%;
+  background: #F8FAFC;
+  border: 1px solid #CBD5E1;
+  border-radius: 7px;
+  padding: 2px;
+}
+
+.trackMd {
+  padding: 3px;
+  border-radius: 8px;
+}
+
+.btn {
+  border: 1px solid transparent;
+  padding: 2px 7px;
+  border-radius: 5px;
+  font-size: 12.5px;
+  min-height: 28px;
+  line-height: 1.45;
+  font-weight: 400;
+  cursor: pointer;
+  font-family: 'Sarabun', sans-serif;
+  letter-spacing: 0;
+  background: transparent;
+  color: #1E293B;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  user-select: none;
+}
+
+.btn:hover:not(.active) {
+  background: #EDF2F7;
+  color: #0F172A;
+}
+
+.active {
+  font-weight: 600;
+}
+
+.activeDefault {
+  background: #1E61F0;
+  color: #FFFFFF;
+  font-weight: 500;
+  border-color: #1D4ED8;
+  box-shadow: 0 1px 2px rgba(30, 97, 240, 0.18);
+}
+
+.activeDanger {
+  background: #E11D48;
+  color: #FFFFFF;
+  border-color: #BE123C;
+  box-shadow: 0 1px 2px rgba(225, 29, 72, 0.2);
+}
+
+.activeSuccess {
+  background: #059669;
+  color: #FFFFFF;
+  border-color: #047857;
+  box-shadow: 0 1px 2px rgba(5, 150, 105, 0.2);
+}
+
+.activeBlue {
+  background: #1E61F0;
+  color: #FFFFFF;
+  border-color: #0052F2;
+  box-shadow: 0 1px 2px rgba(30, 97, 240, 0.2);
+}
+
+.btnBadge {
+  font-size: 11px;
+  padding: 0 5px;
+  border-radius: 9999px;
+  background: rgba(15, 23, 42, 0.07);
+  color: inherit;
+  font-weight: 600;
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
+}
+
+.active .btnBadge {
+  background: rgba(255, 255, 255, 0.24);
+  color: #FFFFFF;
+}
+
+.listControlsGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px 8px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.select {
+  appearance: none;
+  background-color: #FFFFFF;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 7px center;
+  background-size: 11px;
+  padding: 2px 22px 2px 8px;
+  border-radius: var(--radius-sm, 6px);
+  border: 1px solid #CBD5E1;
+  font-size: 12.5px;
+  min-height: 30px;
+  max-width: 100%;
+  line-height: 1.45;
+  font-weight: 500;
+  color: #1E293B;
+  font-family: 'Sarabun', sans-serif;
+  letter-spacing: 0;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.02);
+  transition: all 0.15s ease;
+}
+
+.select:hover {
+  border-color: var(--color-primary, #1E61F0);
+  background-color: #F8FAFC;
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--color-primary, #1E61F0);
+  box-shadow: 0 0 0 2.5px rgba(30, 97, 240, 0.15);
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(30, 97, 240, 0.35);
+}
+@media (max-width: 768px) { .btn, .select { min-height: 44px; } }
