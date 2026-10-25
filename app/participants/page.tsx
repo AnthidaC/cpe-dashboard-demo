@@ -531,6 +531,7 @@ export default function ParticipantsPage() {
                 : "รายชื่อนิสิตที่มีอัตราการเข้าร่วมจริงต่ำกว่า 80% (เรียงจากน้อยไปมาก เพื่อติดตามกลุ่มที่ต้องการความช่วยเหลือ)"
             }
             height={420}
+            fillHeight
             controls={
               <>
                 <ChartControlGroup
@@ -625,8 +626,7 @@ export default function ParticipantsPage() {
                 : `เจาะลึกกิจกรรมของรุ่นปี: ${cohortList.find(c => c.code === selectedCohortDrill)?.fullTitle || ''}`
             }
             subtitle="แสดงจำนวนโครงการจริงที่เปิดให้แต่ละชั้นปี (เปรียบเทียบซ้อนเลเยอร์สี)"
-            height={selectedCohortDrill === 'all' ? 440 : 'auto'}
-            autoHeight={selectedCohortDrill !== 'all'}
+            autoHeight
             controls={
               <ChartControlGroup
                 label="มิติข้อมูล:"
@@ -639,7 +639,7 @@ export default function ParticipantsPage() {
               />
             }
           >
-            <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
               {/* Cohort Selector Pills (Simple & Clean) */}
               <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}>
                 <button
