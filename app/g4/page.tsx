@@ -90,13 +90,29 @@ export default function G4Page() {
   } = g4Metrics;
   const hasPloData = projectsList.some(project => project.plo.length > 0);
   const lowestPloCount = Math.min(...Object.values(ploCount));
-  const lowestPlos = Object.entries(ploCount)
+  const lowestPloEntries = Object.entries(ploCount)
     .filter(([, count]) => count === lowestPloCount)
     .map(([key]) => {
       const num = Number(key);
       const def = getPloDefinition(num, ploDefinitions);
-      return `${def.title} (${def.shortDesc})`;
+      return { num, title: def.title, shortDesc: def.shortDesc };
     });
+
+  const lowestPloValue = !hasPloData
+    ? 'ยังไม่มีข้อมูล'
+    : lowestPloEntries.length === Object.keys(ploCount).length
+    ? 'เท่ากันทุก PLO'
+    : lowestPloEntries.map(p => p.title).join(', ');
+
+  const lowestPloSub = !hasPloData
+    ? 'ยังไม่มีโครงการระบุ PLO ในช่วงที่เลือก'
+    : lowestPloEntries.length === 1
+    ? `${lowestPloCount} โครงการ (${lowestPloEntries[0].shortDesc})`
+    : `${lowestPloCount} โครงการ (เท่ากัน)`;
+
+  const lowestPloTooltip = hasPloData
+    ? lowestPloEntries.map(p => `${p.title}: ${p.shortDesc}`).join('\n')
+    : undefined;
 
   const topKUName = topKU ? topKU[0] : '-';
   const topKUDesc = topKU ? (topKU[0] === 'D' ? 'Determination (มุ่งมั่น)' : topKU[0] === 'K' ? 'Knowledge (ปัญญา)' : topKU[0] === 'I' ? 'Integrity (คุณธรรม)' : 'Utility (ก้าวหน้า)') : '-';
@@ -229,7 +245,7 @@ export default function G4Page() {
           <KpiCard label="อัตลักษณ์หลักที่สนับสนุน" value={topKUName} sub={`${topKUDesc}`} color="cyan" />
           <KpiCard label="สอดคล้องเป้าหมาย SDGs" value={`${sdgProjLen}/${projectsList.length} โครงการ`} sub={`${((sdgProjLen / (projectsList.length || 1)) * 100).toFixed(0)}% ของแผนงานหลัก`} color="emerald" />
           <KpiCard label="เป้าหมาย SDGs ที่ได้รับการสนับสนุน" value={`${sdgCoverage.filter(goal => goal.count > 0).length}/17 เป้าหมาย`} sub="นับจากเป้าหมายที่ระบุในโครงการ" color="blue" />
-          <KpiCard label="PLO ที่ได้รับการสนับสนุนน้อยสุด" value={hasPloData ? lowestPlos.join(', ') : 'ยังไม่มีข้อมูล'} sub={hasPloData ? `${lowestPloCount} โครงการ${lowestPlos.length > 1 ? ' (เท่ากัน)' : ''}` : 'ยังไม่มีโครงการระบุ PLO ในช่วงที่เลือก'} color="purple" />
+          <KpiCard label="PLO ที่ได้รับการสนับสนุนน้อยสุด" value={lowestPloValue} sub={lowestPloSub} tooltip={lowestPloTooltip} color="purple" />
         </div>
 
         <div className={layoutStyles.grid2}>

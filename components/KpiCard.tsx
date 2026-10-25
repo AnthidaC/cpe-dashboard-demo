@@ -11,6 +11,7 @@ interface KpiCardProps {
   trend?: string;
   trendDir?: 'up' | 'down';
   color?: KpiColor;
+  tooltip?: string;
 }
 
 export default function KpiCard({
@@ -20,9 +21,10 @@ export default function KpiCard({
   trend,
   trendDir = 'up',
   color = 'blue',
+  tooltip,
 }: KpiCardProps) {
   return (
-    <div className={`${styles.card} ${styles[color]}`}>
+    <div className={`${styles.card} ${styles[color]}`} title={tooltip}>
       <div className={styles.statusDot} />
       <div className={styles.label}>{label}</div>
       <div className={styles.value}>{value}</div>
