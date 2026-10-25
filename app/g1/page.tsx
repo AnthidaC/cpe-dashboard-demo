@@ -52,14 +52,28 @@ const engagementRate = (project: Project) => project.actual > 0
   ? project.hours * project.participants * 1000 / project.actual : 0;
 
 const getShortProjectName = (name: string): string => {
-  if (name.includes('ปฐมนิเทศ')) return 'ปฐมนิเทศ';
-  if (name.includes('อาจารย์ที่ปรึกษา')) return 'อ.ที่ปรึกษา';
-  if (name.includes('พัฒนาศักยภาพนิสิต')) return 'พัฒนาศักยภาพ';
-  if (name.includes('แบ่งปัน')) return 'วิศวคอมสู่สังคม';
-  if (name.includes('ไซเบอร์')) return 'ความปลอดภัยไซเบอร์';
-  if (name.includes('สู่สากล')) return 'ศักยภาพสู่สากล';
-  if (name.includes('หุ่นยนต์')) return 'หุ่นยนต์';
-  return name.slice(0, 10);
+  const cleaned = name
+    .replace(/^โครงการ/, '')
+    .replace('ภาควิชาวิศวกรรมคอมพิวเตอร์', '')
+    .replace('สำหรับวิศวกรรมคอมพิวเตอร์', '')
+    .replace('และประสบการณ์วิศวกรรมคอมพิวเตอร์', '')
+    .replace('วิศวกรรมคอมพิวเตอร์', '')
+    .trim();
+  if (cleaned.includes('ปฐมนิเทศ')) return 'ปฐมนิเทศ';
+  if (cleaned.includes('อาจารย์ที่ปรึกษา')) return 'อ.ที่ปรึกษา';
+  if (cleaned.includes('พัฒนาศักยภาพนิสิต') || cleaned.includes('พัฒนาศักยภาพ')) return 'พัฒนาศักยภาพ';
+  if (cleaned.includes('แบ่งปัน')) return 'แบ่งปันความรู้';
+  if (cleaned.includes('ไซเบอร์')) return 'ความปลอดภัยไซเบอร์';
+  if (cleaned.includes('สู่สากล')) return 'ศักยภาพสู่สากล';
+  if (cleaned.includes('หุ่นยนต์')) return 'หุ่นยนต์';
+  if (cleaned.includes('จิตอาสา')) return 'จิตอาสา';
+  if (cleaned.includes('กีฬา')) return 'กีฬาสัมพันธ์';
+  if (cleaned.includes('ปัจฉิม')) return 'ปัจฉิมนิเทศ';
+  if (cleaned.includes('ถ่ายทอด')) return 'ถ่ายทอดความรู้';
+  if (cleaned.includes('ติดตามผล')) return 'ติดตามผลการเรียน';
+  if (cleaned.includes('ทำบุญ')) return 'ทำบุญภาควิชา';
+  if (cleaned.includes('เสริมสร้าง') || cleaned.includes('เสริมความรู้')) return 'เสริมความรู้';
+  return cleaned.length > 12 ? cleaned.slice(0, 11).trimEnd() + '…' : cleaned;
 };
 
 export default function G1Page() {
@@ -80,6 +94,7 @@ export default function G1Page() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [activityPeriod, setActivityPeriod] = useState<ActivityPeriod>('quarter');
   const [scatterScaleMode, setScatterScaleMode] = useState<'auto' | 'zero'>('auto');
+  const [bubbleLabelMode, setBubbleLabelMode] = useState<'show' | 'hide'>('show');
 
   // Global filters from context
   const { academicYear, semester } = useFilters();
@@ -468,35 +483,52 @@ export default function G1Page() {
             coverage={projectCoverage(displayProjects, ['satisfaction', 'participants', 'actual'], ['participants'])}
             subtitle="แกน X เป็นบาทต่อคน · แกน Y เป็นคะแนน · ขนาดวงกลมแสดงจำนวนผู้เข้าร่วม"
             height={440}
-            controls={<ChartControlGroup label="สเกล:" options={[{ value: 'auto', label: 'พอดีกับข้อมูล' }, { value: 'zero', label: 'เริ่มจาก 0' }]} value={scatterScaleMode} onChange={setScatterScaleMode} />}
+            controls={
+              <>
+                <ChartControlGroup
+                  label="สเกล:"
+                  options={[
+                    { value: 'auto', label: 'พอดีกับข้อมูล' },
+                    { value: 'zero', label: 'เริ่มจาก 0' },
+                  ]}
+                  value={scatterScaleMode}
+                  onChange={setScatterScaleMode}
+                />
+                <ChartControlGroup
+                  label="ป้ายชื่อ:"
+                  options={[
+                    { value: 'show', label: 'แสดง' },
+                    { value: 'hide', label: 'ซ่อน' },
+                  ]}
+                  value={bubbleLabelMode}
+                  onChange={setBubbleLabelMode}
+                />
+              </>
+            }
           >
             <BubbleChart
-                  datasets={bubbleDatasets}
-                  xLabel="งบประมาณต่อผู้เข้าร่วม (บาท/คน)"
-                  yLabel="ระดับความพึงพอใจ (เต็ม 5 คะแนน)"
-                  xMin={scatterScaleMode === 'auto' ? costScale.min : 0}
-                  xMax={costScale.max}
-                  xStepSize={costScale.step}
-                  yMin={scatterScaleMode === 'auto' ? scoreScale.min : 0}
-                  yMax={scatterScaleMode === 'auto' ? scoreScale.max : 5}
-                  yStepSize={scatterScaleMode === 'auto' ? scoreScale.step : 1}
-                  quadrantX={600}
-                  quadrantY={4.5}
-                  xCallback={(v) => `฿${v.toLocaleString()}`}
-                  yCallback={(v) => `${v.toFixed(2)}`}
-                  tooltipCallback={(ctx) => {
-                    const raw = ctx.raw;
-                    return `${raw.name}: งบต่อหัว ฿${raw.x.toLocaleString()} บาท | พึงพอใจ ${raw.y?.toFixed(2)}/5.00 | ผู้เข้าร่วม ${raw.participants} คน`;
-                  }}
-                  datalabelFormatter={(pt) => pt.shortName ? `${pt.shortName} (฿${pt.x})` : ''}
-                  alignCallback={(pt) => {
-                    const name = pt.name || '';
-                    if (name.includes('อาจารย์') || name.includes('สังคม')) return 'bottom';
-                    return 'top';
-                  }}
-                  onProjectClick={handleBubbleClick}
-                  showLegend
-                />
+              datasets={bubbleDatasets}
+              xLabel="งบประมาณต่อผู้เข้าร่วม (บาท/คน)"
+              yLabel="ระดับความพึงพอใจ (เต็ม 5 คะแนน)"
+              xMin={scatterScaleMode === 'auto' ? costScale.min : 0}
+              xMax={costScale.max}
+              xStepSize={costScale.step}
+              yMin={scatterScaleMode === 'auto' ? scoreScale.min : 0}
+              yMax={scatterScaleMode === 'auto' ? scoreScale.max : 5}
+              yStepSize={scatterScaleMode === 'auto' ? scoreScale.step : 1}
+              quadrantX={600}
+              quadrantY={4.5}
+              xCallback={(v) => `฿${v.toLocaleString()}`}
+              yCallback={(v) => `${v.toFixed(2)}`}
+              tooltipCallback={(ctx) => {
+                const raw = ctx.raw;
+                return `${raw.name}: งบต่อหัว ฿${raw.x.toLocaleString()} บาท | พึงพอใจ ${raw.y?.toFixed(2)}/5.00 | ผู้เข้าร่วม ${raw.participants} คน`;
+              }}
+              showDatalabels={bubbleLabelMode === 'show'}
+              datalabelFormatter={(pt) => pt.shortName || ''}
+              onProjectClick={handleBubbleClick}
+              showLegend
+            />
           </ChartCard>
         </div>
 

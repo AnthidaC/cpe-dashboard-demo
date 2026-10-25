@@ -18,6 +18,7 @@ interface TopbarProps {
   onYearChange?: (year: string) => void;
   semester?: string;
   onSemesterChange?: (semester: string) => void;
+  children?: React.ReactNode;
 }
 
 export default function Topbar({
@@ -29,6 +30,7 @@ export default function Topbar({
   onYearChange: propOnYearChange,
   semester: propSemester,
   onSemesterChange: propOnSemesterChange,
+  children,
 }: TopbarProps) {
   const context = useFilters();
 
@@ -140,6 +142,7 @@ export default function Topbar({
               <option value="summer">ภาคฤดูร้อน</option>
             </select>
           </div>
+          {children}
         </div>
 
         {/* Executive Excel Export Dropdown & Action */}

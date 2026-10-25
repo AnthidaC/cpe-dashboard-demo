@@ -24,6 +24,7 @@ import { academicYears } from '@/lib/reportUtils';
 import { alpha, percentageBandColor } from '@/lib/chartHelpers';
 import layoutStyles from '@/app/layout.module.css';
 import styles from './participants.module.css';
+import topbarStyles from '@/components/Topbar.module.css';
 
 // 6 Student Activity Types
 const activityTypes: ProjectType[] = [
@@ -149,6 +150,14 @@ export default function ParticipantsPage() {
       return count > 0 || c.studyYear >= 5;
     });
   }, [activeYearBE, participants]);
+
+  const selectedCohort = useMemo(() => {
+    if (yearFilter === 'all') return null;
+    if (yearFilter === 'other') {
+      return cohortList.find((c) => c.studyYear >= 5) ?? null;
+    }
+    return cohortList.find((c) => String(c.studyYear) === yearFilter) ?? null;
+  }, [yearFilter, cohortList]);
   const getStudentCohort = useCallback((student: Participant): CohortConfig => resolveStudentCohortDynamic(student.studentId, activeYearBE), [activeYearBE]);
   const calcAttendanceRate = (person: Participant) => +(participantAttendanceRate(person) ?? 0).toFixed(1);
 
@@ -467,7 +476,23 @@ export default function ParticipantsPage() {
             ? "สถิติการเข้าร่วมกิจกรรมแยกตามรายบุคคล อัตราการเข้าร่วม และการกระจายตัวตามรุ่นปีการศึกษา (ทุกปีการศึกษา)"
             : `สถิติการเข้าร่วมกิจกรรมแยกตามรายบุคคล อัตราการเข้าร่วม และการกระจายตัวตามรุ่นปีการศึกษา ประจำปีการศึกษา ${academicYear}${semester !== 'all' ? ` (${semester === 't1' ? 'ภาคต้น' : semester === 't2' ? 'ภาคปลาย' : 'ภาคฤดูร้อน'})` : ''}`
         }
-      />
+      >
+        <div className={topbarStyles.selectWrapper}>
+          <select
+            value={yearFilter}
+            onChange={(e) => setYearFilter(e.target.value as never)}
+            className={topbarStyles.pillSelect}
+            title="เลือกรุ่นปี / ชั้นปี"
+          >
+            <option value="all">ทุกรุ่นปี (รุ่นปี {cohortList[cohortList.length - 1]?.code.replace('-', '')} – {cohortList[0]?.code})</option>
+            {cohortList.map((c) => (
+              <option key={c.code} value={c.studyYear >= 5 ? 'other' : String(c.studyYear)}>
+                {c.fullTitle}
+              </option>
+            ))}
+          </select>
+        </div>
+      </Topbar>
       <div className={layoutStyles.content}>
 <details style={{ marginBottom: 16, padding: 12, border: '1px solid var(--border)', borderRadius: 8, fontSize: 13, lineHeight: 1.65 }}>
 <summary style={{ cursor: 'pointer', fontWeight: 600 }}>วิธีคำนวณอัตราเข้าร่วมและการอ้างอิงชั้นปี</summary>
@@ -488,28 +513,44 @@ export default function ParticipantsPage() {
         {/* KPI Cards (4 executive cards, fully responsive to active academic year view) */}
         <div className={layoutStyles.kpiRow}>
           <KpiCard
-            label="นิสิตที่มีรายชื่อเข้าร่วมกิจกรรม"
-            value={`${kpiStats.total} คน`}
-            sub={academicYear === 'all' ? 'ทุกโครงการในระบบ' : `ประจำปีการศึกษา ${academicYear}`}
+            label={yearFilter === 'all' ? "นิสิตที่มีรายชื่อเข้าร่วมกิจกรรม" : "กลุ่มรุ่นปี / ชั้นปีที่ติดตาม"}
+            value={yearFilter === 'all' ? `${kpiStats.total} คน` : (selectedCohort ? selectedCohort.fullTitle : `ชั้นปีที่ ${yearFilter}`)}
+            sub={
+              yearFilter === 'all'
+                ? (academicYear === 'all' ? 'ทุกโครงการในระบบ' : `ประจำปีการศึกษา ${academicYear}`)
+                : `จากนิสิต ${selectedCohort?.badgeText ?? `ชั้นปีที่ ${yearFilter}`} • ${academicYear === 'all' ? 'ทุกปีการศึกษา' : `ปีการศึกษา ${academicYear}`}`
+            }
             color="navy"
           />
           <KpiCard 
             label="อัตราการเข้าร่วมเฉลี่ย" 
             value={kpiStats.cohortSize ? `${kpiStats.avgAttendance.toFixed(1)}%` : '—'}
-            sub={`เฉลี่ยอัตรารายบุคคลในกลุ่ม ${kpiStats.cohortSize} คน`}
+            sub={
+              yearFilter === 'all'
+                ? `เฉลี่ยอัตรารายบุคคลทั้งหมด ${kpiStats.total} คน`
+                : `เฉลี่ยจากนิสิต ${selectedCohort?.badgeText ?? `ชั้นปีที่ ${yearFilter}`}`
+            }
             color="teal" 
           />
           <KpiCard 
             label="ควรติดตาม (เข้าร่วม < 80%)" 
             value={`${kpiStats.below80Count} คน`} 
-            sub={`วิกฤต (<50%): ${kpiStats.below50Count} คน • เฝ้าระวัง (50-79%): ${kpiStats.between50And80Count} คน`} 
+            sub={
+              yearFilter === 'all'
+                ? `วิกฤต (<50%): ${kpiStats.below50Count} คน • เฝ้าระวัง (50-79%): ${kpiStats.between50And80Count} คน`
+                : `จากนิสิต ${selectedCohort?.badgeText ?? `ชั้นปีที่ ${yearFilter}`} (วิกฤต <50% และเฝ้าระวัง)`
+            }
             trend="กลุ่มต้องติดตามชั่วโมงกิจกรรม"
             color="rose" 
           />
           <KpiCard 
             label="ตามเกณฑ์มาตรฐาน (≥ 80%)" 
             value={`${kpiStats.above80Count} คน`} 
-            sub={`คิดเป็น ${kpiStats.cohortSize > 0 ? ((kpiStats.above80Count / kpiStats.cohortSize) * 100).toFixed(0) : 0}% ของนิสิตที่มีชื่อทั้งหมด`} 
+            sub={
+              yearFilter === 'all'
+                ? `คิดเป็น ${kpiStats.cohortSize > 0 ? ((kpiStats.above80Count / kpiStats.cohortSize) * 100).toFixed(0) : 0}% ของนิสิตที่มีชื่อทั้งหมด`
+                : `คิดเป็น ${kpiStats.cohortSize > 0 ? ((kpiStats.above80Count / kpiStats.cohortSize) * 100).toFixed(0) : 0}% จากนิสิต ${selectedCohort?.badgeText ?? `ชั้นปีที่ ${yearFilter}`}`
+            }
             trend="เข้าร่วมกิจกรรมสม่ำเสมอ"
             color="emerald" 
           />
@@ -526,9 +567,11 @@ export default function ParticipantsPage() {
                 : (rankLimit === 'all' ? "รายชื่อนิสิตที่อัตราเข้าร่วมต่ำกว่าเกณฑ์ (< 80%) ทั้งหมด" : `${rankLimit} อันดับแรก: อัตราเข้าร่วมต่ำกว่าเกณฑ์ (< 80%)`)
             }
             subtitle={
-              rankMode === 'highest'
-                ? "จัดอันดับนิสิตที่มีการเข้าร่วมกิจกรรมจริงสูงสุดเปรียบเทียบกับจำนวนโครงการที่สมัคร"
-                : "รายชื่อนิสิตที่มีอัตราการเข้าร่วมจริงต่ำกว่า 80% (เรียงจากน้อยไปมาก เพื่อติดตามกลุ่มที่ต้องการความช่วยเหลือ)"
+              yearFilter === 'all'
+                ? (rankMode === 'highest'
+                    ? "จัดอันดับนิสิตที่มีการเข้าร่วมกิจกรรมจริงสูงสุดเปรียบเทียบกับจำนวนโครงการที่สมัคร"
+                    : "รายชื่อนิสิตที่มีอัตราการเข้าร่วมจริงต่ำกว่า 80% (เรียงจากน้อยไปมาก เพื่อติดตามกลุ่มที่ต้องการความช่วยเหลือ)")
+                : `จัดอันดับจากนิสิต ${selectedCohort?.fullTitle ?? `ชั้นปีที่ ${yearFilter}`}`
             }
             height={420}
             fillHeight
@@ -801,57 +844,49 @@ export default function ParticipantsPage() {
                 ทะเบียนนิสิตและประวัติการเข้าร่วมกิจกรรม
               </h3>
               <p style={{ fontSize: '13px', color: 'var(--text-muted)', margin: '2px 0 0 0' }}>
-                ตรวจสอบสถิติการเข้าร่วมกิจกรรมจริงรายบุคคลเพื่อการติดตามและให้คำปรึกษา
+                {yearFilter === 'all'
+                  ? "ตรวจสอบสถิติการเข้าร่วมกิจกรรมจริงรายบุคคลเพื่อการติดตามและให้คำปรึกษา"
+                  : `แสดงข้อมูลเฉพาะจากนิสิต ${selectedCohort?.fullTitle ?? `ชั้นปีที่ ${yearFilter}`}`
+                }
               </p>
             </div>
           </div>
 
-          {/* Filter & Search Bar moved to table header */}
-          <div className={styles.searchRow} style={{ marginBottom: '12px' }}>
-            <div className={styles.filterGroup}>
-              <span className={styles.selectLabel}>รุ่นปี / ชั้นปี:</span>
-              <select
-                className={styles.select}
-                value={yearFilter}
-                onChange={(e) => setYearFilter(e.target.value as never)}
+          {/* Action & Filter Pills Row */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '14px' }}>
+            <div className={styles.quickFilterRow} style={{ marginBottom: 0 }}>
+              <span style={{ fontSize: '13px', fontWeight: 'bold', color: 'var(--text-secondary)' }}>เกณฑ์การเข้าร่วม:</span>
+              <button
+                type="button"
+                className={`${styles.quickFilterChip} ${attendanceFilter === 'all' ? styles.quickFilterChipActive : ''}`}
+                onClick={() => setAttendanceFilter('all')}
               >
-                <option value="all">ทุกรุ่นปี (รุ่นปี {cohortList[cohortList.length - 1]?.code.replace('-', '')} – {cohortList[0]?.code})</option>
-                {cohortList.map((c) => (
-                  <option key={c.code} value={c.studyYear >= 5 ? 'other' : String(c.studyYear)}>
-                    {c.fullTitle}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className={styles.filterGroup}>
-              <span className={styles.selectLabel}>เกณฑ์การเข้าร่วม:</span>
-              <select
-                className={styles.select}
-                value={attendanceFilter}
-                onChange={(e) => setAttendanceFilter(e.target.value as never)}
+                {yearFilter === 'all' ? 'ทั้งหมด' : `ทั้งหมด (${selectedCohort?.badgeText ?? `ปี ${yearFilter}`})`} <span className={styles.quickFilterChipCount}>{kpiStats.cohortSize}</span>
+              </button>
+              <button
+                type="button"
+                className={`${styles.quickFilterChip} ${attendanceFilter === 'below50' ? styles.quickFilterChipActive : ''}`}
+                onClick={() => setAttendanceFilter('below50')}
+                style={attendanceFilter === 'below50' ? { backgroundColor: '#DC2626', borderColor: '#DC2626', color: '#fff' } : { color: '#DC2626' }}
               >
-                <option value="all">ทุกระดับการเข้าร่วม</option>
-                <option value="below50">🔴 วิกฤต: เข้าร่วมจริงต่ำมาก (&lt; 50%)</option>
-                <option value="below80">⚠️ ควรติดตาม: เข้าร่วมต่ำกว่าเกณฑ์ (&lt; 80%)</option>
-                <option value="above80">✅ ตามเกณฑ์: เข้าร่วมสูง (≥ 80%)</option>
-              </select>
-            </div>
-
-            <div className={styles.searchField} style={{ marginLeft: 'auto' }}>
-              <span className={styles.searchIcon}>
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <circle cx="11" cy="11" r="8" />
-                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                </svg>
-              </span>
-              <input
-                type="text"
-                className={styles.input}
-                placeholder="ค้นหารหัสนิสิต..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
+                🔴 วิกฤต: เข้าร่วม &lt; 50% <span className={styles.quickFilterChipCount}>{kpiStats.below50Count}</span>
+              </button>
+              <button
+                type="button"
+                className={`${styles.quickFilterChip} ${attendanceFilter === 'below80' ? styles.quickFilterChipActive : ''}`}
+                onClick={() => setAttendanceFilter('below80')}
+                style={attendanceFilter === 'below80' ? { backgroundColor: '#D97706', borderColor: '#D97706', color: '#fff' } : { color: '#D97706' }}
+              >
+                ⚠️ ควรติดตาม: เข้าร่วม &lt; 80% <span className={styles.quickFilterChipCount}>{kpiStats.below80Count}</span>
+              </button>
+              <button
+                type="button"
+                className={`${styles.quickFilterChip} ${attendanceFilter === 'above80' ? styles.quickFilterChipActive : ''}`}
+                onClick={() => setAttendanceFilter('above80')}
+                style={attendanceFilter === 'above80' ? { backgroundColor: '#15803D', borderColor: '#15803D', color: '#fff' } : { color: '#15803D' }}
+              >
+                ✅ ตามเกณฑ์: เข้าร่วม ≥ 80% <span className={styles.quickFilterChipCount}>{kpiStats.above80Count}</span>
+              </button>
             </div>
 
             <button
@@ -866,42 +901,6 @@ export default function ParticipantsPage() {
                 <line x1="12" y1="15" x2="12" y2="3"/>
               </svg>
               <span>ส่งออกรายชื่อนิสิต (.xlsx)</span>
-            </button>
-          </div>
-          
-          {/* Quick-Action Filter Pills (กรองดูแบบเต็ม) */}
-          <div className={styles.quickFilterRow}>
-            <span style={{ fontSize: '13px', fontWeight: 'bold', color: 'var(--text-secondary)' }}>กรองดูแบบเต็ม:</span>
-            <button
-              type="button"
-              className={`${styles.quickFilterChip} ${attendanceFilter === 'all' ? styles.quickFilterChipActive : ''}`}
-              onClick={() => setAttendanceFilter('all')}
-            >
-              ทั้งหมด <span className={styles.quickFilterChipCount}>{kpiStats.cohortSize}</span>
-            </button>
-            <button
-              type="button"
-              className={`${styles.quickFilterChip} ${attendanceFilter === 'below50' ? styles.quickFilterChipActive : ''}`}
-              onClick={() => setAttendanceFilter('below50')}
-              style={attendanceFilter === 'below50' ? { backgroundColor: '#DC2626', borderColor: '#DC2626', color: '#fff' } : { color: '#DC2626' }}
-            >
-              🔴 วิกฤต: เข้าร่วม &lt; 50% <span className={styles.quickFilterChipCount}>{kpiStats.below50Count}</span>
-            </button>
-            <button
-              type="button"
-              className={`${styles.quickFilterChip} ${attendanceFilter === 'below80' ? styles.quickFilterChipActive : ''}`}
-              onClick={() => setAttendanceFilter('below80')}
-              style={attendanceFilter === 'below80' ? { backgroundColor: '#D97706', borderColor: '#D97706', color: '#fff' } : { color: '#D97706' }}
-            >
-              ⚠️ ควรติดตาม: เข้าร่วม &lt; 80% <span className={styles.quickFilterChipCount}>{kpiStats.below80Count}</span>
-            </button>
-            <button
-              type="button"
-              className={`${styles.quickFilterChip} ${attendanceFilter === 'above80' ? styles.quickFilterChipActive : ''}`}
-              onClick={() => setAttendanceFilter('above80')}
-              style={attendanceFilter === 'above80' ? { backgroundColor: '#15803D', borderColor: '#15803D', color: '#fff' } : { color: '#15803D' }}
-            >
-              ✅ ตามเกณฑ์: เข้าร่วม ≥ 80% <span className={styles.quickFilterChipCount}>{kpiStats.above80Count}</span>
             </button>
           </div>
 
