@@ -130,7 +130,7 @@ export default function Sidebar() {
       </button>
       <div className={styles.logo}>
         <div className={styles.logoIcon}>
-          <Image src="/kukps_logo180x180.png" alt="ระบบบริหารและวิเคราะห์กิจกรรมนิสิต" width={44} height={44} priority unoptimized />
+          <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ? `/${process.env.NEXT_PUBLIC_BASE_PATH}` : ''}/kukps_logo180x180.png`} alt="ระบบบริหารและวิเคราะห์กิจกรรมนิสิต" width={44} height={44} priority unoptimized />
         </div>
         <div className={styles.logoText}>
           <h1 className={styles.logoTitle}>Executive Dashboard</h1>
